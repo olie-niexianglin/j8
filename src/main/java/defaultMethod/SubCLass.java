@@ -1,6 +1,5 @@
 package defaultMethod;
 
-import javax.management.relation.RoleUnresolved;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
@@ -25,9 +24,13 @@ public class SubCLass extends DefaultMethodClass implements DefaultMethodInterfa
         B.setSubTree(Arrays.asList(D,E));
         D.setSubTree(Arrays.asList(F));
 
+
+
         Stack<Tree> stack = new Stack<Tree>();
+        Stack invokeStack = new Stack();
+
         try {
-            search(A, "C", stack);
+            search(A, "C", stack,invokeStack);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -36,20 +39,21 @@ public class SubCLass extends DefaultMethodClass implements DefaultMethodInterfa
 
     }
 
-    private static void search(Tree a, String d, Stack<Tree> stack) {
+    private static void search(Tree a, String d, Stack<Tree> stack, Stack invokeStack) {
 
 
+        invokeStack.push(null);
 
         stack.push(a);
 
-        if (a.getName().equals(d)) {
+        if (a.getName().equals(d) || invokeStack.size() >10000) {
             throw new RuntimeException();
         }
 
 
         if (a.getSubTree() != null && a.getSubTree().size() > 0) {
             for (int i = 0; i < a.getSubTree().size(); i++) {
-                search(a.getSubTree().get(i), d, stack);
+                search(a.getSubTree().get(i), d, stack, invokeStack);
             }
         }
 
